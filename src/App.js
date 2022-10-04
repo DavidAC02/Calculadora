@@ -5,20 +5,22 @@ import Pantalla from './componentes/Pantalla';
 import BotonClear from './componentes/BotonClear';
 import { useState } from 'react';
 import { evaluate } from "mathjs";
+import cleanOutput from './algotimos/no_input-problematico';
 
 function App() {
 
-  const [input, setInput]=useState("");
+  const [input, setInput]=useState("0");
 
   const agregarinput=val=>{
-    setInput(input+val);
+    const clean=cleanOutput(input+val)
+    setInput(clean);
   };
 
   const calcularResultado=()=>{
-    if (input){
-      setInput(evaluate(input));
+    if (/\D$/.test(input)){
+      setInput(evaluate(input.replace(/\D$/,"")));
     }else{
-      alert("Ingresa valores antes de apretar =")
+      setInput(evaluate(input));
     }
   };
 
@@ -51,7 +53,7 @@ function App() {
           <Boton manejarClic={agregarinput}>/</Boton>
         </div>
         <div className="fila">
-          <BotonClear manejarClear={ () => setInput("")}>Clear</BotonClear>
+          <BotonClear manejarClear={ () => setInput("0")}>Clear</BotonClear>
         </div>
       </div>
       <div className="foot">
